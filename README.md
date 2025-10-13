@@ -1,1 +1,1 @@
-# foli-back
+# for django practice
