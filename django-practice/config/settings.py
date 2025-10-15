@@ -34,6 +34,8 @@ ALLOWED_HOSTS = []
 
 INSTALLED_APPS = [
     "api.users",
+    "api.quiz",
+    "api.speech_to_text",
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
