@@ -10,7 +10,7 @@ from .service import fetch_and_save_quiz_info
 class QuizHistoryView(APIView):
     permission_classes = [IsAuthenticated]
 
-    def get(self, request, *args, **kwargs):
+    def post(self, request, *args, **kwargs):
         serializer = QuizHistorySerializer(data=request.data)
         if serializer.is_valid():
             validated = serializer.validated_data
