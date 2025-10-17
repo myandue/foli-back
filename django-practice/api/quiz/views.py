@@ -23,6 +23,6 @@ class QuizHistoryView(APIView):
 
             return Response(
                 {"quiz_data": quiz_data},
-                status=status.HTTP_200_OK,
+                status=status.HTTP_201_CREATED,
             )
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
