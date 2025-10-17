@@ -4,7 +4,9 @@ from ..users.models import User
 
 class SpeechToText(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-    audio_url = models.URLField()
+    audio_file = models.FileField(
+        upload_to="uploads/audio/", null=False, blank=True
+    )
     transcription = models.TextField(null=True, blank=True)
     summary = models.TextField(null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
