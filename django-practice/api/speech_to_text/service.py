@@ -1,6 +1,9 @@
 import requests
+import os
 
 from .models import SpeechToText
+
+AI_SERVER_URL = os.getenv("AI_SERVER_URL", "http://localhost:9000")
 
 
 def process_audio_transcription(speech_to_text_id: int):
@@ -22,11 +25,10 @@ def process_audio_transcription(speech_to_text_id: int):
 
 
 def fetch_speech_to_text_and_save(audio_file_path: str):
-    # Send audio file to external speech-to-text API
-    api_url = "https://api.example.com/speech-to-text"
+    api_url = f"{AI_SERVER_URL}/api/stt/transcription"
 
     with open(audio_file_path, "rb") as f:
-        response = requests.post(api_url, files={"file": f})
+        response = requests.post(api_url, files={"audio_file": f})
         response.raise_for_status()
 
     result = response.json()
@@ -50,8 +52,7 @@ def process_audio_summary(speech_to_text_id: int):
 
 
 def fetch_summary_and_save(transcription: str):
-    # Send transcription to external summarization API
-    api_url = "https://api.example.com/summarize"
+    api_url = f"{AI_SERVER_URL}/api/documents/summary"
 
     response = requests.post(api_url, json={"text": transcription})
     response.raise_for_status()
@@ -73,13 +74,11 @@ def process_audio_quiz(speech_to_text_id: int, level: int, amount: int):
     return quiz
 
 
-def get_quiz(transcription: str, level: int, amount: int):
-    # Send transcription to external quiz generation API
-    api_url = "https://api.example.com/generate-quiz"
-    params = {"text": transcription, "level": level, "amount": amount}
+def get_quiz(transcription: str, level: str, amount: int):
+    api_url = f"{AI_SERVER_URL}/api/quiz/documents"
+    params = {"docs": transcription, "level": level, "amount": amount}
 
     response = requests.post(api_url, json=params)
     response.raise_for_status()
 
-    result = response.json()
-    return result.get("quiz", [])
+    return response.json().get("questions", [])

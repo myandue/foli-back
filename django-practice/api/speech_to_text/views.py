@@ -84,12 +84,12 @@ class SummaryView(APIView):
 
 
 class QuizView(APIView):
-    LEVEL = 1  # Default level
+    LEVEL = "NORMAL"  # Default level
     AMOUNT = 5  # Default amount
 
     permission_classes = [IsAuthenticated]
 
-    def get(self, request, *args, **kwargs):
+    def post(self, request, *args, **kwargs):
         speech_to_text_id = request.data.get("id")
         if not speech_to_text_id:
             return Response(
@@ -98,11 +98,11 @@ class QuizView(APIView):
             )
 
         try:
-            quiz = process_audio_quiz(
+            quiz_data = process_audio_quiz(
                 speech_to_text_id, self.LEVEL, self.AMOUNT
             )
             return Response(
-                {"quiz": quiz},
+                {"quiz_data": quiz_data},
                 status=status.HTTP_200_OK,
             )
         except ValueError as e:
