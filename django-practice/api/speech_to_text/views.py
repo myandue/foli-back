@@ -39,7 +39,7 @@ class TranscriptionView(APIView):
         try:
             transcription = process_audio_transcription(speech_to_text_id)
             return Response(
-                {"transcription": transcription},
+                {"transcript": transcription},
                 status=status.HTTP_200_OK,
             )
         except ValueError as e:
