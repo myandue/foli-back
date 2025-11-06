@@ -102,7 +102,7 @@ class QuizView(APIView):
                 speech_to_text_id, self.LEVEL, self.AMOUNT
             )
             return Response(
-                {"quiz_data": quiz_data},
+                {"quiz": quiz_data},
                 status=status.HTTP_200_OK,
             )
         except ValueError as e:
