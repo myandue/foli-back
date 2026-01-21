@@ -36,6 +36,7 @@ INSTALLED_APPS = [
     "api.users",
     "api.quiz",
     "api.speech_to_text",
+    "api.chat",
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
@@ -171,3 +172,17 @@ STATIC_URL = "static/"
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
+
+CACHES = {
+    "default": {
+        "BACKEND": "django_redis.cache.RedisCache",
+        "LOCATION": "redis://127.0.0.1:6379/1",
+        "OPTIONS": {
+            "CLIENT_CLASS": "django_redis.client.DefaultClient",
+        },
+    }
+}
+
+REDIS_HOST = env("REDIS_HOST") or "127.0.0.1"
+REDIS_PORT = env("REDIS_PORT") or 6379
+REDIS_CHAT_DB = env("REDIS_CHAT_DB") or 2
