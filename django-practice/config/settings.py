@@ -123,6 +123,8 @@ DATABASES = {
     }
 }
 
+AI_SERVER_URL = env("AI_SERVER_URL") or "http://localhost:9000"
+
 
 # Password validation
 # https://docs.djangoproject.com/en/5.2/ref/settings/#auth-password-validators

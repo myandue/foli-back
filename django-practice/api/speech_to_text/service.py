@@ -1,9 +1,9 @@
 import requests
-import os
+from django.conf import settings
 
 from .models import SpeechToText
 
-AI_SERVER_URL = os.getenv("AI_SERVER_URL", "http://localhost:9000")
+AI_SERVER_URL = settings.AI_SERVER_URL
 
 
 def process_audio_transcription(speech_to_text_id: int):

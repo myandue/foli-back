@@ -1,9 +1,9 @@
 import requests
-import os
+from django.conf import settings
 
 from .models import QuizHistory
 
-AI_SERVER_URL = os.getenv("AI_SERVER_URL", "http://localhost:9000")
+AI_SERVER_URL = settings.AI_SERVER_URL
 
 
 def fetch_and_save_quiz_info(user, keyword, level, amount):
