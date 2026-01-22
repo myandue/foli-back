@@ -2,6 +2,7 @@ import requests
 from django.conf import settings
 
 from .models import SpeechToText
+from ..conversation.service import get_answer_from_ai
 
 AI_SERVER_URL = settings.AI_SERVER_URL
 
@@ -82,3 +83,30 @@ def get_quiz(transcription: str, level: str, amount: int):
     response.raise_for_status()
 
     return response.json().get("questions", [])
+
+
+def conversation_about_audio(
+    init: bool,
+    session_id: str,
+    user_message: str,
+    speech_to_text_id: int = None,
+):
+    if init:
+        try:
+            speech_to_text_instance = SpeechToText.objects.get(
+                id=speech_to_text_id
+            )
+        except SpeechToText.DoesNotExist:
+            return ValueError("The instance not found.")
+
+        answer = get_answer_from_ai(
+            session_id,
+            user_message,
+            document=speech_to_text_instance.transcription,
+        )
+
+        return answer
+    else:
+        answer = get_answer_from_ai(session_id, user_message)
+
+        return answer

@@ -1,4 +1,4 @@
-import redis
+import redis, json
 from django.conf import settings
 
 redis_client = redis.Redis(
@@ -10,11 +10,17 @@ redis_client = redis.Redis(
 
 
 class ChatContextStore:
-    def get(self, session_id):
-        return redis_client.get(f"chat:ctx:{session_id}")
+    def append(self, session_id, context, ttl=3600):
+        redis_client.rpush(
+            f"chat:ctx:{session_id}", json.dumps(context, ensure_ascii=False)
+        )
+        redis_client.expire(f"chat:ctx:{session_id}", ttl)
 
-    def set(self, session_id, context, ttl=1800):
-        redis_client.setex(f"chat:ctx:{session_id}", ttl, context)
+    def get_recent_5(self, session_id):
+        # 전체: 0 -1, 처음 다섯개: 0 4, 최근 다섯개: -5 -1
+        items = redis_client.lrange(f"chat:ctx:{session_id}", -5, -1)
+        print(items)
+        return [json.loads(item) for item in items]
 
-    def delete(self, session_id):
+    def clear(self, session_id):
         redis_client.delete(f"chat:ctx:{session_id}")
