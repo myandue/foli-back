@@ -39,6 +39,5 @@ class SpeechToTextSerializer(serializers.ModelSerializer):
 
 
 class ConversationSerializer(serializers.Serializer):
-    init = serializers.BooleanField(required=True)
     context = serializers.CharField(required=True)
-    speech_to_text_id = serializers.IntegerField(required=False)
+    speech_to_text_id = serializers.IntegerField(required=True)

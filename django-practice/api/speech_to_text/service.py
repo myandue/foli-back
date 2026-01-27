@@ -86,27 +86,19 @@ def get_quiz(transcription: str, level: str, amount: int):
 
 
 def conversation_about_audio(
-    init: bool,
-    session_id: str,
-    user_message: str,
-    speech_to_text_id: int = None,
+    session_id: str, user_message: str, speech_to_text_id: int
 ):
-    if init:
-        try:
-            speech_to_text_instance = SpeechToText.objects.get(
-                id=speech_to_text_id
-            )
-        except SpeechToText.DoesNotExist:
-            return ValueError("The instance not found.")
-
-        answer = get_answer_from_ai(
-            session_id,
-            user_message,
-            document=speech_to_text_instance.transcription,
+    try:
+        speech_to_text_instance = SpeechToText.objects.get(
+            id=speech_to_text_id
         )
+    except SpeechToText.DoesNotExist:
+        return ValueError("The instance not found.")
 
-        return answer
-    else:
-        answer = get_answer_from_ai(session_id, user_message)
+    answer = get_answer_from_ai(
+        session_id,
+        user_message,
+        document=speech_to_text_instance.transcription,
+    )
 
-        return answer
+    return answer

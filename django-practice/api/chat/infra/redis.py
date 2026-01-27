@@ -19,7 +19,6 @@ class ChatContextStore:
     def get_recent_5(self, session_id):
         # 전체: 0 -1, 처음 다섯개: 0 4, 최근 다섯개: -5 -1
         items = redis_client.lrange(f"chat:ctx:{session_id}", -5, -1)
-        print(items)
         return [json.loads(item) for item in items]
 
     def clear(self, session_id):

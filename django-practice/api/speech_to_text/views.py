@@ -128,14 +128,9 @@ class ConversationView(APIView):
             session_id = f"user:{request.user.id}"
 
             answer = conversation_about_audio(
-                init=validated["init"],
                 session_id=session_id,
                 user_message=validated["context"],
-                speech_to_text_id=(
-                    validated["speech_to_text_id"]
-                    if validated["init"]
-                    else None
-                ),
+                speech_to_text_id=validated["speech_to_text_id"],
             )
 
             return Response(
