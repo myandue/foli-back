@@ -12,5 +12,5 @@ urlpatterns = [
     path("transcript", TranscriptionView.as_view(), name="transcript"),
     path("summary", SummaryView.as_view(), name="summary"),
     path("quiz", QuizView.as_view(), name="quiz"),
-    path("conversation", ConversationView.as_view(), name="conversation"),
+    path("qna", ConversationView.as_view(), name="conversation"),
 ]

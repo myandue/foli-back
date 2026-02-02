@@ -26,6 +26,8 @@ def get_answer_from_ai(session_id, user_message, document):
     # }
 
     answer = response.json().get("answer", "")
+    # answer = response.get("answer", "")
+
     set_chat_context(session_id=session_id, context=f"user: {user_message}")
     set_chat_context(
         session_id=session_id,

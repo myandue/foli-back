@@ -3,7 +3,7 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework.permissions import IsAuthenticated
 
-from .serializers import SpeechToTextSerializer, ConversationSerializer
+from .serializers import SpeechToTextSerializer
 from .service import (
     process_audio_transcription,
     process_audio_summary,
@@ -122,19 +122,32 @@ class ConversationView(APIView):
     permission_classes = [IsAuthenticated]
 
     def post(self, request, *args, **kwargs):
-        serializer = ConversationSerializer(data=request.data)
-        if serializer.is_valid():
-            validated = serializer.validated_data
-            session_id = f"user:{request.user.id}"
-
-            answer = conversation_about_audio(
-                session_id=session_id,
-                user_message=validated["context"],
-                speech_to_text_id=validated["speech_to_text_id"],
+        speech_to_text_id = request.data.get("id")
+        user_message = request.data.get("content")
+        if not speech_to_text_id or not user_message:
+            return Response(
+                {"error": "ID and context are required."},
+                status=status.HTTP_400_BAD_REQUEST,
             )
 
+        try:
+            session_id = f"user:{request.user.id}:{speech_to_text_id}"
+            answer = conversation_about_audio(
+                session_id=session_id,
+                user_message=user_message,
+                speech_to_text_id=speech_to_text_id,
+            )
             return Response(
                 {"answer": answer},
                 status=status.HTTP_200_OK,
             )
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        except ValueError as e:
+            return Response(
+                {"error": str(e)},
+                status=status.HTTP_404_NOT_FOUND,
+            )
+        except Exception as e:
+            return Response(
+                {"error": "An error occurred while processing."},
+                status=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            )

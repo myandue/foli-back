@@ -36,8 +36,3 @@ class SpeechToTextSerializer(serializers.ModelSerializer):
                 "File size exceeds the limit of 10MB."
             )
         return value
-
-
-class ConversationSerializer(serializers.Serializer):
-    context = serializers.CharField(required=True)
-    speech_to_text_id = serializers.IntegerField(required=True)
